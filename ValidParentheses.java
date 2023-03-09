@@ -6,7 +6,15 @@ public class ValidParentheses {
     public static void main(String[] args) {
 //        System.out.println(new ValidParentheses().isValid("[](){}"));
 //        System.out.println(new ValidParentheses().isValid("{{(({{{{[[[](){}]]}}}}))}}"));
-        System.out.println(new ValidParentheses().isValid("}("));
+//        System.out.println(new ValidParentheses().isValid("}("));
+        Stack<String> stack = new Stack<>();
+//        stack.add("com.ofss.digx.app.card.service.Status.blockCard");
+//        stack.add("com.ofss.digx.app.accountaccess.service.AccountAccess.checkAccountAccess");
+//        stack.add("com.ofss.digx.app.accountaccess.service.AccountAccess.getAllowedAccounts");
+//        stack.add("performAction");
+        stack.add("com.ofss.digx.app.card.service.Status.blockCard");
+        stack.add("com.ofss.digx.app.accountaccess.service.AccountAccess.getAllowedAccounts");
+        int i = 0;
     }
 
     public boolean isValid(String s) {

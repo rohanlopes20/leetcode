@@ -1,7 +1,7 @@
 package com.leetcode;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BinaryTreeDepth {
     static class TreeNode {
@@ -56,7 +56,64 @@ public class BinaryTreeDepth {
 //        System.out.println(new BinaryTreeDepth().isBalanced(root1222));
 //        System.out.println(new BinaryTreeDepth().tree2str(root122));
 //        System.out.println(new BinaryTreeDepth().leafSimilar(root122, root111));
-        System.out.println(new BinaryTreeDepth().rangeSumBST(root122, 1, 5));
+//        System.out.println(new BinaryTreeDepth().rangeSumBST(root122, 1, 5));
+
+        TreeNode code4 = new TreeNode(4);
+        TreeNode code5 = new TreeNode(5);
+        TreeNode code3 = new TreeNode(3, code4, code5);
+        TreeNode code1 = new TreeNode(1, new TreeNode(2), code3);
+        System.out.println(new Codec().serialize(code1));
+        System.out.println(new Codec().deserialize("1,2,3,null,null,4,5"));
+//        System.out.println(new Codec().serialize(null));
+        //Input: root = [1,2,3,null,null,4,5]
+    }
+
+    static class Codec {
+
+        // Encodes a tree to a single string.
+       /*  public String serialize(TreeNode root) {
+           List<String> strings = new ArrayList<>();
+            if(root != null)
+                getString(root, strings);
+            return "[" + strings.stream().collect(Collectors.joining(",")) + "]";
+        }*/
+
+        public String serialize(TreeNode root) {
+            if (root == null) return "#";
+            return root.val + "," + serialize(root.left) + "," + serialize(root.right);
+        }
+        /*private void getString(TreeNode root, List<String> strings) {
+            Queue<TreeNode> treeNodes = new LinkedList<>();
+            treeNodes.add(root);
+
+            while(!treeNodes.isEmpty()) {
+                TreeNode treeNode = treeNodes.poll();
+                if(treeNode == null) {
+                    List<TreeNode> nulls = treeNodes.stream().filter(Objects::nonNull).collect(Collectors.toList());
+                    if(!treeNodes.isEmpty() && !nulls.isEmpty())
+                        strings.add("null");
+                    continue;
+                }
+                strings.add(String.valueOf(treeNode.val));
+                treeNodes.add(treeNode.left);
+                treeNodes.add(treeNode.right);
+            }
+        }*/
+
+        // Decodes your encoded data to tree.
+        public TreeNode deserialize(String data) {
+            Queue<String> queue = new LinkedList<>(Arrays.asList(data.split(",")));
+            return helper(queue);
+        }
+
+        private TreeNode helper(Queue<String> queue) {
+            String s = queue.poll();
+            if (s == null || s.isEmpty() || s.equals("null")) return null;
+            TreeNode root = new TreeNode(Integer.valueOf(s));
+            root.left = helper(queue);
+            root.right = helper(queue);
+            return root;
+        }
     }
     public int rangeSumBST(TreeNode root, int low, int high) {
         return rangeSumBSTHelper(root, low, high, 0);
