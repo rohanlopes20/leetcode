@@ -52,7 +52,40 @@ public class Graph {
         _2.neighbors = (Arrays.asList(_1, _3));
         _3.neighbors = (Arrays.asList(_2, _4));
         _4.neighbors = (Arrays.asList(_1, _3));
-        System.out.println(new Graph().cloneGraph(_1));
+//        System.out.println(new Graph().cloneGraph(_1));
+
+        // n = 4, flights = [[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]], src = 0, dst = 3, k = 1
+        System.out.println(new Graph().findCheapestPrice(4, new int[][]{
+                {0,1,100},
+                {1,2,100},
+                {2,0,100},
+                {1,3,600},
+                {2,3,200}} ,0, 3, 1));
+    }
+    
+
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        int cheapestPrice = -1;
+        int prices[] = new int[n];
+        Arrays.fill(prices, Integer.MAX_VALUE);
+        prices[src] = 0;
+
+        for(int j = 0; j <= k; j++) {
+            int tmpPrices[] = prices.clone();
+            for (int i = 0; i < flights.length; i++) {
+                if(prices[flights[i][0]] == Integer.MAX_VALUE) {
+                    continue;
+                }
+                if(prices[flights[i][0]] + flights[i][2] < tmpPrices[flights[i][1]]) {
+                    tmpPrices[flights[i][1]] = prices[flights[i][0]] + flights[i][2];
+                }
+            }
+            prices = tmpPrices;
+            System.out.println(Arrays.toString(tmpPrices));
+            System.out.println(Arrays.toString(prices));
+        }
+
+        return prices[dst] == Integer.MAX_VALUE ? cheapestPrice : prices[dst];
     }
 
     public Node cloneGraph(Node node) {

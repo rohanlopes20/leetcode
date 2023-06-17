@@ -1,6 +1,8 @@
 package com.leetcode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class MergeLinkedList {
@@ -17,11 +19,70 @@ public class MergeLinkedList {
 
 
         ListNode four41 = new ListNode(4, null);
-        ListNode two2 = new ListNode(2, four41);
-        ListNode one12 = new ListNode(1, two2);
+        ListNode two2 = new ListNode(3, four41);
+        ListNode one12 = new ListNode(2, two2);
         ListNode one11 = new ListNode(1, one12);
 //        System.out.println(new MergeLinkedList().deleteDuplicates(one11));
-        System.out.println(new MergeLinkedList().oddEvenList(one11));
+//        System.out.println(new MergeLinkedList().oddEvenList(one11));
+//        System.out.println(new MergeLinkedList().mergeKLists(new ListNode[]{one, one1}));
+        System.out.println(new MergeLinkedList().swapPairs(one11));
+    }
+
+    public ListNode swapPairs(ListNode head) {
+        ListNode tmpHead = head;
+        ListNode newHead = null;
+        ListNode prev = null;
+
+        while(tmpHead != null && tmpHead.next != null) {
+            ListNode bk = tmpHead.next.next;
+            ListNode node = getPair(tmpHead);
+
+            if(prev == null) {
+                newHead = node;
+                prev = newHead;
+            } else {
+                prev.next.next = node;
+            }
+            tmpHead = bk;
+        }
+
+        return newHead;
+    }
+
+    private ListNode getPair(ListNode node) {
+        if(node != null && node.next != null) {
+            ListNode first  = node;
+            ListNode second = node.next;
+            second.next = first;
+            first.next = null;
+            return second;
+        }
+        return node;
+    }
+
+    public ListNode mergeKLists(ListNode[] lists) {
+        List<Integer> list = new ArrayList<>();
+
+        for(int i = 0; i < lists.length; i++) {
+            ListNode currentHead = lists[i];
+
+            while (currentHead != null) {
+                list.add(currentHead.val);
+                currentHead = currentHead.next;
+            }
+        }
+
+        Collections.sort(list);
+        ListNode root = new ListNode(-1);
+        ListNode prev = root;
+
+        for(int i = 0; i < list.size(); i++) {
+           ListNode node = new ListNode(list.get(i));
+           prev.next = node;
+           prev = node;
+        }
+
+        return root;
     }
 
     public ListNode oddEvenList(ListNode head) {

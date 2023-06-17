@@ -61,11 +61,223 @@ public class BinaryTreeDepth {
         TreeNode code4 = new TreeNode(4);
         TreeNode code5 = new TreeNode(5);
         TreeNode code3 = new TreeNode(3, code4, code5);
-        TreeNode code1 = new TreeNode(1, new TreeNode(2), code3);
-        System.out.println(new Codec().serialize(code1));
-        System.out.println(new Codec().deserialize("1,2,3,null,null,4,5"));
+        TreeNode code1 = new TreeNode(1, new TreeNode(8), code3);
+//        System.out.println(new Codec().serialize(code1));
+//        System.out.println(new Codec().deserialize("1,2,3,null,null,4,5"));
 //        System.out.println(new Codec().serialize(null));
         //Input: root = [1,2,3,null,null,4,5]
+
+//        System.out.println(new BinaryTreeDepth().sortedArrayToBST(new int[]{-10,-3,0,5,9}));
+//        System.out.println(new BinaryTreeDepth().createBinaryTree(new int[][]{{20,15,1},{20,17,0},{50,20,1},{50,80,0},{80,19,1}}));
+//        System.out.println(new BinaryTreeDepth().sumNumbers(code1));
+//        System.out.println(new BinaryTreeDepth().isCompleteTree(code1));
+//        int[] inorder = new int[]{9,3,15,20,7}, postorder = {9,15,7,20,3};
+//        System.out.println(new BinaryTreeDepth().buildTree(inorder, postorder));
+//        System.out.println(new BinaryTreeDepth().hasPathSum(code1, 9));
+//        System.out.println(new BinaryTreeDepth().pathSum(code1, 9));
+//        int[] nums = new int[]{1,2,3,3};
+//        Set<Integer> list11 = Arrays.stream(nums).boxed().collect(Collectors.toSet());
+        TreeNode code44 = new TreeNode(-8);
+        TreeNode code55 = new TreeNode(7);
+        TreeNode code33 = new TreeNode(7, code44, code55);
+        TreeNode code11 = new TreeNode(1, new TreeNode(0), code33);
+        System.out.println(new BinaryTreeDepth().maxLevelSum(code11));
+    }
+
+    public int maxLevelSum(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        maxLevelSumHelper(root, list, 0);
+        Integer max = Integer.MIN_VALUE;
+        int index = 0;
+        for(int i = 0; i < list.size() ; i ++) {
+            if(list.get(i) > max) {
+                max = list.get(i);
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    public void maxLevelSumHelper(TreeNode node, List<Integer> sums, int level) {
+        if(node == null) {
+            return;
+        }
+
+        if(sums.size() <= level) {
+            sums.add(node.val);
+        } else {
+            sums.set(level, sums.get(level) + node.val);
+        }
+
+        maxLevelSumHelper(node.left, sums, level + 1);
+        maxLevelSumHelper(node.right, sums,level + 1);
+    }
+
+    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+        List<List<Integer>> list = new ArrayList<>();
+
+        sumHelper2(root, list, new ArrayList<>(), 0, targetSum);
+        System.out.println(list);
+        return list;
+    }
+
+    private void sumHelper2(TreeNode node, List<List<Integer>> list, List<Integer> nodes, int sum, int targetSum) {
+        if(node == null) return;
+
+        nodes.add(node.val);
+        if(node.left == null && node.right == null) {
+            if(sum + node.val == targetSum) {
+                list.add(nodes);
+            }
+            return;
+        }
+        sumHelper2(node.left, list, new ArrayList<>(nodes), sum + node.val, targetSum);
+        sumHelper2(node.right, list, new ArrayList<>(nodes), sum + node.val, targetSum);
+    }
+
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        List<Integer> list = new ArrayList<>();
+        sumHelper(root, list, 0);
+        System.out.println(list);
+        return list.contains(targetSum);
+    }
+
+    private void sumHelper(TreeNode node, List<Integer> list, int sum) {
+        if(node == null) return;
+        if(node.left == null && node.right == null) {
+            list.add(sum + node.val);
+            return;
+        }
+        sumHelper(node.left, list, sum + node.val);
+        sumHelper(node.right, list, sum + node.val);
+    }
+
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        Map<Integer, Integer> integerIntegerMap = new HashMap<>();
+
+        for(int i = 0; i < inorder.length; i++) {
+            integerIntegerMap.put(i, inorder[i]);
+        }
+        TreeNode root = new TreeNode(postorder[postorder.length-1]);
+
+//        if not preorder or not inorder:
+//        return None
+//
+//        root = TreeNode(preorder[0])
+//        mid = inorder.index(preorder[0])
+//        root.left = self.buildTree(preorder[1 : mid + 1], inorder[:mid])
+//        root.right = self.buildTree(preorder[mid + 1 :], inorder[mid + 1 :])
+//        return root
+
+        return treeBuilderHelper(root, integerIntegerMap);
+    }
+
+    private TreeNode treeBuilderHelper(TreeNode treeNode, Map<Integer, Integer> integerIntegerMap) {
+
+
+        return treeNode;
+    }
+
+    public boolean isCompleteTree(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.add(root);
+
+        boolean nullFound = false;
+
+        while(!queue.isEmpty()) {
+            TreeNode element = queue.poll();
+
+            if(element == null) {
+                nullFound = true;
+            } else {
+                if(nullFound) {
+                    return false;
+                }
+
+                queue.add(element.left);
+                queue.add(element.right);
+            }
+        }
+        return true;
+    }
+
+    public int sumNumbers(TreeNode root) {
+        int sum = 0;
+        List<String> stringList = new ArrayList<>();
+        sumHelper(root, stringList, "");
+
+        for(String integer : stringList) {
+            sum += Integer.parseInt(integer);
+        }
+
+        System.out.println(stringList);
+        return sum;
+    }
+
+    private void sumHelper(TreeNode node, List<String> integers, String str) {
+        if(node == null) return;
+        if(node.left == null && node.right == null) {
+            integers.add(str + "" + node.val);
+            return;
+        }
+        sumHelper(node.left, integers, str + "" + node.val);
+        sumHelper(node.right, integers, str + "" + node.val);
+    }
+
+    public TreeNode createBinaryTree(int[][] descriptions) {
+//        descriptions[i] = [parenti, childi, isLefti] indicates that parenti is the parent of
+//        childi in a binary tree of unique values. Furthermore,
+//        If isLefti == 1, then childi is the left child of parenti.
+//        If isLefti == 0, then childi is the right child of parenti
+        Map<Integer, TreeNode> treeNodeMap = new HashMap<>();
+        Set<Integer> childs = new HashSet<>();
+
+        for(int i = 0; i < descriptions.length; i++) {
+            int parent = descriptions[i][0];
+            int child  = descriptions[i][1];
+            boolean isLeft = descriptions[i][2] == 1;
+
+            TreeNode node = treeNodeMap.getOrDefault(parent, new TreeNode(parent));
+
+            if(isLeft) {
+                node.left = treeNodeMap.getOrDefault(child, new TreeNode(child));
+                treeNodeMap.put(child, node.left);
+
+            } else {
+                node.right = treeNodeMap.getOrDefault(child, new TreeNode(child));
+                treeNodeMap.put(child, node.right);
+            }
+            childs.add(child);
+            treeNodeMap.put(parent, node);
+        }
+
+        TreeNode root = null;
+
+        for(int i = 0; i < descriptions.length; i++) {
+            if(!childs.contains(descriptions[i][0])) {
+                root = treeNodeMap.get(descriptions[i][0]);
+                break;
+            }
+        }
+
+        return root;
+    }
+
+    public TreeNode sortedArrayToBST(int[] nums) {
+        TreeNode treeNode = helperBST(nums, 0, nums.length );
+        return treeNode;
+    }
+
+    public TreeNode helperBST(int[] nums, int left, int right) {
+        if(left >= right) {
+            return null;
+        }
+        int mid = (right+left)/2;
+        TreeNode rootNode = new TreeNode(nums[mid]);
+        rootNode.left = helperBST(nums, left, mid);
+        rootNode.right = helperBST(nums, mid+1, right);
+        return rootNode;
     }
 
     static class Codec {

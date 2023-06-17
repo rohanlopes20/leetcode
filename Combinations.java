@@ -1,15 +1,52 @@
 package com.leetcode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Combinations {
     public static void main(String[] args) {
 //        System.out.println(new Combinations().combine(4, 2));
 //
-        System.out.println(new Combinations().combinationSum(new int[] {2,3,6,7}, 7));
+//        System.out.println(new Combinations().combinationSum(new int[] {2,3,6,7}, 7));
 //        System.out.println(new Combinations().combinationSum2(new int[] {10,1,2,7,6,1,5}, 8));
+        System.out.println(new Combinations().zeroFilledSubarray(new int[] {1,3,0,0,2,0,0,4}));
+        System.out.println(new Combinations().zeroFilledSubarray(new int[] {0,0,0,2,0,0}));
+        System.out.println(new Combinations().zeroFilledSubarray(new int[] {2,10,2019}));
+
+    }
+
+    public long zeroFilledSubarray(int[] nums) {
+        long res = 0;
+        int  j = 0;
+        for (int i = 0; i < nums.length; ++i) {
+            if (nums[i] != 0)
+                j = i + 1;
+            res += i - j + 1;
+        }
+        return res;
+
+        /*//int[] counterArray = new int[nums.length];
+        Map<Integer, Integer> counterMap = new HashMap<>();
+
+        for(int i = 0; i < nums.length; i++) {
+            if(nums[i] == 0) {
+                int index = i;
+                int repeatCounter = 0;
+                while (index < nums.length) {
+                    if(nums[index] == 0) {
+                        counterMap.put(repeatCounter, counterMap.getOrDefault(repeatCounter, 0) + 1);
+                        repeatCounter++;
+                        //counterArray[repeatCounter++]++;
+                    } else {
+                        break;
+                    }
+                    index++;
+                }
+            }
+        }
+        System.out.println(counterMap);
+        //System.out.println(Arrays.toString(counterArray));
+//        return Arrays.stream(counterArray).filter(i-> i != 0).sum();
+        return counterMap.values().stream().mapToInt(i->i).sum();*/
     }
 
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {

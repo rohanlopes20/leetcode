@@ -1,5 +1,7 @@
 package com.leetcode;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -12,7 +14,24 @@ public class Subsets {
         int[] students = {1, 2, 3};
 //        System.out.println(new Subsets().permute(students));
 //        System.out.println(new Subsets().letterCombinations("23"));
-        System.out.println(new Subsets().generateParenthesis(3));
+//        System.out.println(new Subsets().generateParenthesis(3));
+        BigDecimal product = new BigDecimal("0").multiply(BigDecimal.valueOf(0));
+        new Subsets().generatePermutations("12345");
+    }
+
+    public void generatePermutations(String input) {
+        permutationHelper(input, "", input.length());
+    }
+
+    public void permutationHelper(String str, String permute, int len) {
+        if(permute.length() == len) {
+            System.out.println(">>>" + str + permute);
+            return;
+        }
+
+        for(int i = 0; i < str.length(); i++) {
+            permutationHelper(str.substring(0, i) + str.substring(i+1), permute + String.valueOf(str.charAt(i)), len);
+        }
     }
 
     public List<String> generateParenthesis(int n) {
