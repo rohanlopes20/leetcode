@@ -14,8 +14,35 @@ public class LCS {
 //        chars1 = "pwwkew";
 //        chars1 = "abcabc";
         chars1 = "LIZALROHANLOPES";
-        System.out.println("max length is : " + lcs.getLCSLengthSlidingWindow(chars1));
-        System.out.println("max length is : " + lcs.lengthOfLongestSubstring(chars1));
+//        System.out.println("max length is : " + lcs.getLCSLengthSlidingWindow(chars1));
+//        System.out.println("max length is : " + lcs.lengthOfLongestSubstring(chars1));
+//        System.out.println("max length is : " + lcs.longestConsecutive(new int[] {100,4,200,1,3,2}));
+//        System.out.println("max length is : " + lcs.longestCommonSubsequence("abcde", "ace"));
+        System.out.println("max length is : " + lcs.longestCommonSubsequence("bsbininm", "jmjkbkjkv"));
+    }
+
+    public int longestCommonSubsequence(String text1, String text2) {
+        int matrix[][] = new int[text1.length() + 1][text2.length() + 1];
+
+        for(int row = 0; row < matrix.length - 1; row++) {
+            for(int col = 0; col < matrix[row].length - 1; col++) {
+                if(text2.charAt(col) == text1.charAt(row)) {
+                    matrix[row + 1][col + 1] = 1 + matrix[row][col];
+                } else {
+                    matrix[row + 1][col + 1] = Math.max(matrix[row + 1][col], matrix[row][col + 1]);
+                }
+            }
+        }
+
+        System.out.println(Arrays.deepToString(matrix));
+
+        return matrix[matrix.length - 1][matrix[0].length - 1];
+    }
+
+    public int longestConsecutive(int[] nums) {
+        int length = 0;
+
+        return length;
     }
 
     public int lengthOfLongestSubstring(String s) {

@@ -81,7 +81,151 @@ public class BinaryTreeDepth {
         TreeNode code55 = new TreeNode(7);
         TreeNode code33 = new TreeNode(7, code44, code55);
         TreeNode code11 = new TreeNode(1, new TreeNode(0), code33);
-        System.out.println(new BinaryTreeDepth().maxLevelSum(code11));
+//        System.out.println(new BinaryTreeDepth().maxLevelSum(code11));
+//        System.out.println(new BinaryTreeDepth().largestValues(code11));
+        int[] arr = new int[]{1,2,3};
+//        new BinaryTreeDepth().permute(Arrays.stream(arr).boxed().collect(Collectors.toList()));
+        // n = 4, left = [4,3], right = [0,1]
+        new BinaryTreeDepth().getLastMoment(7, new int[] {},new int[]{0,1,2,3,4,5,6,7});
+
+        Comparator<Long> newCom = new Comparator<Long>() {
+            @Override
+            public int compare(Long o1, Long o2) {
+                Integer s1 = Integer.valueOf(o1 + "" + o2);
+                Integer s2 = Integer.valueOf(o2 + "" + o1);
+
+                return s1.compareTo(s2);
+            }
+        };
+
+        Long[] numsIntegers = Arrays.stream(arr).boxed().toArray(Long[]::new);
+
+        Arrays.sort(numsIntegers, newCom);
+
+        Arrays.stream(numsIntegers).map(i-> String.valueOf(i)).collect(Collectors.joining());
+    }
+
+    public int getLastMoment(int n, int[] left, int[] right) {
+        int ans = 0;
+
+        for (int i = 0; i < left.length; i++) {
+            if(left[i] >= n) {
+                ans = Math.max(left[i], ans);
+            }
+        }
+
+        for (int j = 0; j < right.length; j++) {
+            if(n - right[j] >= n) {
+                ans = Math.max(n - right[j], ans);
+            }
+        }
+
+        return ans;
+    }
+
+    public int averageOfSubtree(TreeNode root) {
+        int counter = 0;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+
+        while(!queue.isEmpty()) {
+            TreeNode curr = queue.poll();
+            if(curr != null) {
+                int avg = sumHelper(curr);
+
+                if(avg == curr.val) {
+                    counter++;
+                }
+                queue.add(curr.right);
+                queue.add(curr.left);
+            }
+        }
+
+
+        return counter;
+    }
+
+    private int sumHelper(TreeNode node) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(node);
+        int countOfElements = 0;
+        int currentSum = 0;
+
+        while(!queue.isEmpty()) {
+            TreeNode curr = queue.poll();
+            if(curr != null) {
+                countOfElements++;
+                currentSum += curr.val;
+
+                queue.add(curr.right);
+                queue.add(curr.left);
+            }
+        }
+        return currentSum/countOfElements;
+    }
+
+
+
+    public int[] findArray(int[] pref) {
+        int[] ans = new int[pref.length];
+        int prev = 0;
+
+        for(int i= 0; i < pref.length; i++) {
+            int current = pref[i] ^ prev;
+            ans[i] = current;
+            prev = current ^ pref[i] ^ prev;
+            System.out.println(prev);
+        }
+
+        return ans;
+    }
+
+    public void permute(List<Integer> input) {
+        System.out.println(permuteHelper(new ArrayList<>(input)));
+    }
+
+    // 1,2,3 | 1,3,2 | 2,1,3 | 2,3,1 | 3,1,2 | 3,2,1
+    public List<List<Integer>> permuteHelper(List<Integer> currResult) {
+        List<List<Integer>> ans2 = new ArrayList<>();
+        System.out.println(currResult);
+        if(currResult.size() == 1) {
+            ans2.add(currResult);
+            return ans2;
+        }
+        for(int i = 0; i < currResult.size(); i++) {
+            int curr = currResult.remove(0);
+            List<List<Integer>> results = permuteHelper(new ArrayList<>(currResult));
+            for(List<Integer> integers : results) {
+                integers.add(curr);
+            }
+            ans2.addAll(results);
+            currResult.add(curr);
+        }
+        return ans2;
+    }
+
+    public List<Integer> largestValues(TreeNode root) {
+        List<List<Integer>> listPerRow = new ArrayList<>();
+
+        helper(root, listPerRow, 0);
+
+        List<Integer> ans = listPerRow.stream().map(i->Arrays.stream(i.stream().mapToInt(ii->ii).toArray()).max().getAsInt()).collect(Collectors.toList());
+        return ans;
+    }
+
+    void helper(TreeNode node, List<List<Integer>> listPerRow, int index) {
+        if(node == null) {
+            return;
+        }
+        if(listPerRow.size() - 1 < index) {
+            listPerRow.add(new ArrayList<>());
+            listPerRow.get(index).add(node.val);
+        } else {
+            listPerRow.get(index).add(node.val);
+        }
+        int currRow = index + 1;
+        helper(node.left, listPerRow, currRow);
+        helper(node.right, listPerRow, currRow);
     }
 
     public int maxLevelSum(TreeNode root) {

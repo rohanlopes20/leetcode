@@ -1,8 +1,6 @@
 package com.leetcode;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -11,12 +9,39 @@ public class MergeSort {
         int[] array = {5,3,6,9,2,1,4,7,0,8,};
         long time = System.currentTimeMillis();
         new MergeSort().mergeSort(uniqueRandomElements(1000000));
-        System.out.println(System.currentTimeMillis() - time);
+//        System.out.println(System.currentTimeMillis() - time);
         time = System.currentTimeMillis();
 //        new MergeSort().bubbleSort(uniqueRandomElements(1000000));
 //        System.out.println(System.currentTimeMillis() - time);
-        new MergeSort().merge(new int[]{1,7,8,0,0,0}, 3, new int[] {2,5,6}, 3);
-        System.out.println(Arrays.toString(new MergeSort().sortedSquares(new int[] {2,5,6})));
+//        new MergeSort().merge(new int[]{1,7,8,0,0,0}, 3, new int[] {2,5,6}, 3);
+//        System.out.println(Arrays.toString(new MergeSort().sortedSquares(new int[] {2,5,6})));
+        System.out.println(new MergeSort().customSortString("exv", "xwvee"));
+    }
+
+    public String customSortString(String order, String s) {
+        Map<Character, Integer> map = new HashMap<>();
+
+        for(int i = 0; i < order.length(); i++) {
+            map.put(order.charAt(i), i);
+        }
+
+        char[] arr = s.toCharArray();
+        List<Character> list = new ArrayList<>();
+
+        for(int i = 0; i < arr.length; i++) {
+            list.add(arr[i]);
+        }
+
+        list.sort((a, b) -> {
+            System.out.println(a + " " + b);
+            if (map.containsKey(a) && map.containsKey(b)) {
+                return Integer.compare(map.get(a), map.get(b));
+            } else {
+                return map.containsKey(a) ? 1 : map.containsKey(b)  ? 1 : -1;
+            }
+        });
+
+        return list.stream().map(i->i+"").collect(Collectors.joining());
     }
 
     public int[] sortedSquares(int[] nums) {

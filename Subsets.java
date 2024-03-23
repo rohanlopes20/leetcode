@@ -15,8 +15,59 @@ public class Subsets {
 //        System.out.println(new Subsets().permute(students));
 //        System.out.println(new Subsets().letterCombinations("23"));
 //        System.out.println(new Subsets().generateParenthesis(3));
-        BigDecimal product = new BigDecimal("0").multiply(BigDecimal.valueOf(0));
-        new Subsets().generatePermutations("12345");
+//        BigDecimal product = new BigDecimal("0").multiply(BigDecimal.valueOf(0));
+//        new Subsets().generatePermutations("123");
+//        System.out.println(new Subsets().findDifferentBinaryString(new String[]{"01", "10"}));
+        new Subsets().newPermute("123");
+
+        int i = 0;
+    }
+
+    public void newPermute(String str) {
+        newPermuteHelper(str, str.length(), "");
+    }
+
+    public void newPermuteHelper(String str, int length, String current) {
+        if(current.length() == length) {
+            System.out.println(current);
+            return;
+        }
+
+        for(int i = 0; i < str.length(); i++) {
+            //if(!current.contains("" + str.charAt(i)))
+                newPermuteHelper(str.substring(0, i) + str.substring(i+1), length, current + str.charAt(i));
+        }
+    }
+
+    public String findDifferentBinaryString(String[] nums) {
+//        Create a function generate(curr):
+//        If curr.length = n:
+//        If curr is not in numsSet, return curr.
+//                Return an empty string.
+//                Set addZero = generate(curr + "0").
+//                If addZero is not an empty string, return it.
+//                Return generate(curr + "1").
+//                Set n = nums.length.
+//                Convert nums to a hash set numsSet.
+//        Return generate("").
+
+        Set<String> strings = new HashSet<>();
+        strings.addAll(Arrays.asList(nums));
+        return generate("", nums[0].length(), strings);
+    }
+
+    private String generate(String str, int n, Set<String> set) {
+        if(str.length() == n) {
+            return set.contains(str) ? "" : str;
+        }
+
+        String addZero = generate(str + "0", n, set);
+
+        if(addZero != "") {
+            return addZero;
+        }
+
+        return generate(str + "1", n, set);
     }
 
     public void generatePermutations(String input) {
